@@ -5,130 +5,88 @@
 <main class="flex-grow-1 container py-4">
     <!-- Featured News -->
     <div class="row mb-5">
-        <div class="col-lg-8 mb-4">
-          <a href="news.html" class="btn p-0">
-            <div class="card news-card h-100">
-                <div class="featured-news-image" style="background-image: url('../image/meteor.jfif');"></div>
-                <div class="card-body">
-                    <h2 class="card-title fs-3 fw-bold">Днем на Южную Америку упадет метеорит размером в 4 футбольных поля</h2>
-                    <p class="card-text">Ученые NASA предупреждают о приближающемся метеорите, который может стать причиной значительных разрушений на территории Южной Америки. Согласно расчетам, космическое тело входит в атмосферу Земли сегодня днем.</p>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="news-date">12:31</span>
-                        <span class="badge bg-light text-dark category-tag">Космос</span>
+        <div class="col-lg-8 mb-4">       
+                <a href="{{ top_r.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0 link-dark">
+                    <div class="card news-card h-100">
+                        <div class="featured-news-image" style="background-image: url('{{ top_r.card_image.url }}');"></div>
+                        <div class="card-body">
+                            <h2 class="card-title fs-3 fw-bold">{{ top_r.card_title }}</h2>
+                            <p class="card-text">{{ top_r.card_text }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="news-date">{{ top_r.time_create }}</span>
+                                <span class="badge bg-light text-dark category-tag">{{ top_r.cat }}</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-          </a>
+                </a>      
         </div>
         
         <div class="col-lg-4">
+            {% for p in extra_posts %}
             <div class="side-news-item">
-                <a href="#" class="side-news-title">Найден способ продлить жизнь человека до 150 лет</a>
-                <p class="mb-1">Ученые из Гарвардского университета заявили о прорыве в исследованиях старения клеток.</p>
+                <a href="{{ p.get_absolute_url }}" class="side-news-title">{{ p.card_title }}</a>
+                <p class="mb-1">{{ p.card_text }}</p>
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="news-date">09:45</span>
-                    <span class="badge bg-light text-dark category-tag">Медицина</span>
+                    <span class="news-date">{{ p.time_create }}</span>
+                    <span class="badge bg-light text-dark category-tag">{{ p.cat }}</span>
                 </div>
             </div>
-            
-            <div class="side-news-item">
-                <a href="#" class="side-news-title">Новое поколение чипов позволит смартфонам работать неделю без подзарядки</a>
-                <p class="mb-1">Компания Qualcomm представила революционную технологию, которая сократит энергопотребление устройств на 80%.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="news-date">11:20</span>
-                    <span class="badge bg-light text-dark category-tag">Гаджеты</span>
-                </div>
-            </div>
-            
-            <div class="side-news-item">
-                <a href="#" class="side-news-title">Искусственный интеллект научился предсказывать землетрясения за неделю</a>
-                <p class="mb-1">Японские исследователи создали нейросеть, которая анализирует микроколебания почвы с точностью до 93%.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="news-date">10:05</span>
-                    <span class="badge bg-light text-dark category-tag">Разработка ИИ</span>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
     <!-- R Section -->
     <div class="category-section">
-      <div class="row mb-4">
-          <div class="col">
-              <h2 class="section-title fs-4 fw-bold">Лучший рейтинг:</h2>
-          </div>
-      </div>
-  
-      <div class="row mb-4">
-          <div class="col-md-7">
-              <div class="card news-card">
-                  <div class="row g-0">
-                      <div class="col-md-8">
-                          <div class="card-body">
-                              <h3 class="card-title fs-4 fw-bold">Эксперимент CERN подтвердил существование пятой фундаментальной силы</h3>
-                              <p class="card-text">Учёные Европейской организации по ядерным исследованиям объявили о прорыве в квантовой физике, который может изменить наше понимание Вселенной. Новая сила взаимодействия выходит за рамки стандартной модели физики.</p>
-                              <div class="d-flex justify-content-between align-items-center mt-3">
-                                  <span class="news-date">09:45</span>
-                                  <span class="badge bg-light text-dark category-tag">Физика</span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-4">
-                          <div class="news-image h-100" style="background-image: url('../image/power.jfif');"></div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-  
-          <div class="col-md-5">
-              <div class="card news-card h-100">
-                  <div class="card-body">
-                      <h3 class="card-title fs-4 fw-bold">Марсоход Perseverance обнаружил биомаркеры органического происхождения</h3>
-                      <p class="card-text">NASA сообщает о значительном открытии: марсоход Perseverance зафиксировал химические соединения, которые на Земле обычно ассоциируются с биологическими процессами. Учёные подчёркивают, что это ещё не доказывает существование жизни.</p>
-                      <div class="d-flex justify-content-between align-items-center mt-3">
-                          <span class="news-date">11:17</span>
-                          <span class="badge bg-light text-dark category-tag">Космос</span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  
-      <div class="row mb-4">
-          <div class="col-md-5">
-              <div class="card news-card h-100">
-                  <div class="card-body">
-                      <h3 class="card-title fs-4 fw-bold">DeepMind создал ИИ, способный прогнозировать структуру любого белка</h3>
-                      <p class="card-text">AlphaFold 3 демонстрирует революционную точность в предсказании трёхмерной структуры белков, что может ускорить разработку лекарств и вакцин в десятки раз. Система уже используется в разработке препаратов против рака.</p>
-                      <div class="d-flex justify-content-between align-items-center mt-3">
-                          <span class="news-date">14:05</span>
-                          <span class="badge bg-light text-dark category-tag">Разработка ИИ</span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-  
-          <div class="col-md-7">
-              <div class="card news-card">
-                  <div class="row g-0">
-                      <div class="col-md-8">
-                          <div class="card-body">
-                              <h3 class="card-title fs-4 fw-bold">Neuralink успешно установил беспроводной интерфейс мозг-компьютер второму пациенту</h3>
-                              <p class="card-text">Компания Илона Маска продолжает клинические испытания устройства, позволяющего управлять компьютером силой мысли. Второй пациент с параличом нижних конечностей уже демонстрирует возможность работы с текстом и навигации в интернете без использования рук.</p>
-                              <div class="d-flex justify-content-between align-items-center mt-3">
-                                  <span class="news-date">16:22</span>
-                                  <span class="badge bg-light text-dark category-tag">Гаджеты</span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-4">
-                          <div class="news-image h-100" style="background-image: url('../image/neur.jfif');"></div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="section-title fs-4 fw-bold">Лучший рейтинг:</h2>
+            </div>
+        </div>
+        <div class="row mb-4">
+      {% for p in r_bar %}
+      {% if forloop.counter0 == 0 or forloop.counter0 == 3 %}
+        
+            <div class="col-md-7 pb-4">
+                <a href="{{ p.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0 link-dark">
+                <div class="card news-card">
+                    <div class="row g-0">
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h3 class="card-title fs-4 fw-bold">{{ p.card_title }}</h3>
+                                <p class="card-text">{{ p.card_text }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="news-date">{{ p.time_create }}</span>
+                                    <span class="badge bg-light text-dark category-tag">{{ p.cat }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="news-image h-100" style="background-image: url('{{p.card_image.url}}');"></div>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-md-5 pb-4">
+                
+                <div class="card news-card h-100">
+                    <a href="{{ p.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0 link-dark">
+                    <div class="card-body">
+                        <h3 class="card-title fs-4 fw-bold">{{ p.card_title }}</h3>
+                        <p class="card-text">{{ p.card_text }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="news-date">{{ p.time_create }}</span>
+                            <span class="badge bg-light text-dark category-tag">{{ p.cat }}</span>
+                        </div>
+                    </div>
+                </a>
+                </div>
+                
+            </div>
+            {% endif %}
+      {% endfor %}
+    </div>
 
     <!-- Two Column Section: New and Popular -->
     <div class="row">
@@ -136,148 +94,57 @@
       <div class="col-lg-6 mb-4">
           <h2 class="section-title fs-4 fw-bold">Новое:</h2>
           
-          <div class="card news-card mb-3">
-              <div class="row g-0">
-                  <div class="col-9">
-                      <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Figure представила робота-гуманоида, способного к самостоятельному обучению</h3>
-                          <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">17:45</span>
-                              <span class="badge bg-light text-dark category-tag">Роботы</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/robot.jfif');"></div>
-                  </div>
-              </div>
-          </div>
+          {% for p in new_posts %}
           
-          <div class="card news-card mb-3">
+          <div class="card news-card mb-3"> 
+            <a href="{{ p.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0 link-dark">          
               <div class="row g-0">
                   <div class="col-9">
                       <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Новая нейросеть способна определять заболевания по голосу с точностью 93%</h3>
+                          <h3 class="card-title fs-5 fw-bold">{{ p.card_title }}</h3>
                           <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">16:12</span>
-                              <span class="badge bg-light text-dark category-tag">Разработка ИИ</span>
+                              <span class="news-date">{{ p.time_create }}</span>
+                              <span class="badge bg-light text-dark category-tag">{{ p.cat }}</span>
                           </div>
                       </div>
                   </div>
                   <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/neuroset.jfif');"></div>
+                      <div class="news-image h-100" style="background-image: url('{{p.card_image.url}}');"></div>
                   </div>
               </div>
+            </a>
           </div>
-          
-          <div class="card news-card mb-3">
-              <div class="row g-0">
-                  <div class="col-9">
-                      <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Ученые обнаружили следы воды в кратере Марса, пригодные для будущих колонистов</h3>
-                          <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">15:08</span>
-                              <span class="badge bg-light text-dark category-tag">Космос</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/mars.jfif');"></div>
-                  </div>
-              </div>
-          </div>
-          
-          <div class="card news-card mb-3">
-              <div class="row g-0">
-                  <div class="col-9">
-                      <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Создан имплант, восстанавливающий зрение при дегенерации сетчатки</h3>
-                          <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">14:23</span>
-                              <span class="badge bg-light text-dark category-tag">Медицина</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/glaz.jfif');"></div>
-                  </div>
-              </div>
-          </div>
-      </div>
+          {% endfor %}
+        </div>
       
       <!-- Popular Section -->
       <div class="col-lg-6 mb-4">
-          <h2 class="section-title fs-4 fw-bold">Популярное сегодня:</h2>
-          
-          <div class="card news-card mb-3">
-              <div class="row g-0">
-                  <div class="col-9">
-                      <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Квантовый компьютер впервые решил задачу, недоступную для классических суперкомпьютеров</h3>
-                          <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">09:47</span>
-                              <span class="badge bg-light text-dark category-tag">Физика</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/сщьз.jfif');"></div>
-                  </div>
-              </div>
-          </div>
-          
-          <div class="card news-card mb-3">
-              <div class="row g-0">
-                  <div class="col-9">
-                      <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Apple представила нейроинтерфейс Vision Pro 2 с расширенными возможностями ИИ</h3>
-                          <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">11:30</span>
-                              <span class="badge bg-light text-dark category-tag">Гаджеты</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/apple.jfif');"></div>
-                  </div>
-              </div>
-          </div>
-          
-          <div class="card news-card mb-3">
-              <div class="row g-0">
-                  <div class="col-9">
-                      <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Обнаружен микроорганизм, способный разлагать пластик в 200 раз быстрее известных аналогов</h3>
-                          <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">08:15</span>
-                              <span class="badge bg-light text-dark category-tag">Исследования</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/micro.jfif');"></div>
-                  </div>
-              </div>
-          </div>
-          
-          <div class="card news-card mb-3">
-              <div class="row g-0">
-                  <div class="col-9">
-                      <div class="card-body">
-                          <h3 class="card-title fs-5 fw-bold">Web3 технологии трансформируют финансовый сектор: ключевые тренды 2023 года</h3>
-                          <div class="d-flex justify-content-between align-items-center mt-2">
-                              <span class="news-date">10:05</span>
-                              <span class="badge bg-light text-dark category-tag">Тренды IT</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-3">
-                      <div class="news-image h-100" style="background-image: url('../image/web3.jfif');"></div>
-                  </div>
-              </div>
-          </div>
+          <h2 class="section-title fs-4 fw-bold">Категория дня: {{ name_cat }}</h2>
+          {% for p in date_post %}
+          <a href="{{ p.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0 link-dark">
+            <div class="card news-card mb-3">
+                <div class="row g-0">
+                    <div class="col-9">
+                        <div class="card-body">
+                            <h3 class="card-title fs-5 fw-bold">{{ p.card_title }}</h3>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="news-date">{{ p.time_create }}</span>
+                                <span class="badge bg-light text-dark category-tag">{{ p.cat }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="news-image h-100" style="background-image: url('{{ p.card_image.url }}');"></div>
+                    </div>
+                </div>
+            </div>
+          </a>
+          {% endfor %}
+        
       </div>
   </div>
+
 </main>
+    
 
 {% endblock %}

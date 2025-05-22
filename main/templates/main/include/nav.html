@@ -1,16 +1,10 @@
+
 <nav class="border-bottom">
     <div class="container">
         <div class="d-flex justify-content-center flex-wrap">
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Открытия</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Исследования</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Гаджеты</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Роботы</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Разработка ИИ</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Космос</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Физика</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Тренды IT</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Медицина</a>
-            <a href="#" class="nav-link py-3 px-2 px-md-3">Авторские</a>
+            {% for c in cat %}
+            <a href="{{ c.get_absolute_url }}" class="nav-link py-3 px-2 px-md-3">{{c.name}}</a>
+            {% endfor %}         
         </div>
     </div>
 </nav>

@@ -1,0 +1,199 @@
+{% extends "main/base.html" %}
+{% load reactions_tags %}
+{% load custom_filters %}
+
+{% block content %} 
+<!-- Main content -->
+<main class="flex-grow-1 container py-4">
+    <div class="article-container">
+        <h1 class="fs-2 fw-bold mb-4">{{ post.card_title }}</h1>
+        
+        <div class="article-meta mb-4">
+            <div class="article-meta-item">
+                <svg class="bi" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                </svg>
+                <span>{{ post.time_create }}</span>
+            </div>                
+            {% if user.is_authenticated %}
+    <form action="{% url 'toggle_favorite' post.slug %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn {% if is_favorite %}btn-danger{% else %}btn-outline-danger{% endif %}">
+            {% if is_favorite %}
+                <i class="bi bi-heart-fill"></i> Удалить из избранного
+            {% else %}
+                <i class="bi bi-heart"></i> Добавить в избранное
+            {% endif %}
+        </button>
+    </form>
+            {% else %}
+                <a href="{% url 'users:auth_page' %}?next={{ request.path }}" class="btn btn-outline-danger">
+                    <i class="bi bi-heart"></i> Добавить в избранное
+                </a>
+            {% endif %}
+        
+
+
+            <div class="ms-auto">
+                <span class="badge bg-light text-dark category-tag">{{ post.cat }}</span>
+            </div>
+        </div>
+        
+        <div class="article-content">
+            {{ content|safe }}
+        </div>
+        
+        <!-- Reactions Section -->
+        <div class="reaction-container">
+            {% for reaction in reaction_types %}
+                <form method="POST" action="{% url 'handle_reaction' %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="article_id" value="{{ post.id }}">
+                    <input type="hidden" name="reaction_type_id" value="{{ reaction.id }}">
+                    <button type="submit" class="btn btn-light me-2 {% if user_reaction == reaction.code %}active{% endif %}">
+                        {{ reaction.emoji }} <span class="count">{{ reaction_counts|get_item:reaction.code|default:0 }}</span>
+                    </button>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+   
+    
+    
+    
+    <!-- Comments Section -->
+    <div class="comments-section mt-5" id="comments">
+        <h3 class="mb-4">Комментарии ({{ post.comments.count }})</h3>
+        
+        {% for comment in comments %}  
+            <div class="comment mb-4 p-3 border rounded" id="comment-{{ comment.id }}">
+                <a href="{% url 'users:profile' comment.author.id %}" class='link-offset-2 link-underline link-underline-opacity-0 link-dark'>
+                <div class="d-flex align-items-center mb-2">
+                    
+                        {% if comment.author.profile.avatar %}
+                            <img src="{{ comment.author.profile.avatar.url }}" alt="{{ comment.author.username }}" class="author-avatar rounded-circle" width="40" height="40">
+                        {% else %}
+                            <div class="author-avatar bg-secondary rounded-circle d-flex align-items-center justify-content-center">
+                                <span class="text-white">{{ comment.author.username|first|upper }}</span>
+                            </div>
+                        {% endif %}
+                         
+                    <div>
+                        <strong>{{ comment.author.username }}</strong>
+                        <small class="text-muted ms-2">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                    </div>
+                
+                </div>
+            </a>
+                <p class="mb-2">{{ comment.text }}</p>
+                
+                {% if request.user.is_authenticated %}
+                <button class="btn btn-sm btn-outline-secondary reply-btn" 
+                        data-comment-id="{{ comment.id }}">
+                    Ответить
+                </button>
+          
+                <div class="reply-form mt-3" id="reply-form-{{ comment.id }}" style="display: none;">
+                    <form method="post" action="{% url 'post' post_slug=post.slug %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="reply">
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        {{ reply_form.text }}
+                        <button type="submit" class="btn btn-primary btn-sm mt-2">Отправить ответ</button>
+                    </form>
+                </div>
+                {% else %}
+                        <div class="alert alert-info mt-2 p-2" style="font-size: 0.9rem;">
+                            <a href="{% url 'users:auth_page' %}?next={{ request.path|urlencode }}#comments" class="alert-link">Войдите</a>, 
+                            чтобы ответить на комментарий
+                        </div>
+                {% endif %}
+                
+                <!-- Вложенные комментарии -->
+                {% for reply in comment.replies.all %}  
+                <a href="{% url 'users:profile' reply.author.id %}" class='link-offset-2 link-underline link-underline-opacity-0 link-dark'>
+                    <div class="reply ms-4 mt-3 p-2 bg-light rounded">
+                        <div class="d-flex align-items-center mb-1">
+                            {% if reply.author.profile.avatar %}
+                            <img src="{{ reply.author.profile.avatar.url }}" alt="{{ reply.author.username }}" class="author-avatar rounded-circle">
+                        {% else %}
+                            <div class="author-avatar bg-secondary rounded-circle d-flex align-items-center justify-content-center">
+                                <span class="text-white">{{ reply.author.username|first|upper }}</span>
+                            </div>
+                        {% endif %}
+                            <div>
+                                <strong>{{ reply.author.username }}</strong>
+                                <small class="text-muted ms-2">{{ reply.created_at|date:"d.m.Y H:i" }}</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">{{ reply.text }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        {% empty %}
+            <p>Пока нет комментариев. Будьте первым!</p>
+        {% endfor %}
+        
+        <!-- Форма основного комментария -->
+        <div class="comment-form mt-4">
+            <h4 class="mb-3">Оставить комментарий</h4>
+            {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'post' post_slug=post.slug %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="parent">
+                    {{ comment_form.text }}
+                    <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+                </form>
+            {% else %}
+                <div class="alert alert-info">
+                    <a href="{% url 'users:auth_page' %}?next={{ request.path|urlencode }}#comments" class="alert-link">Войдите</a>, 
+                    чтобы оставить комментарий
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Related Articles -->
+    <div class="mb-5">
+        <h3 class="related-articles-title fs-4 fw-bold">Из той же категории</h3>
+        
+        <div class="row">
+            {% for p in cat_post %}
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <a href="{{ p.get_absolute_url }}" class="link-offset-2 link-underline link-underline-opacity-0 link-dark">
+                    <div class="card news-card h-100">
+                        <div class="news-image" style="background-image: url('{{ p.card_image.url }}'); height: 150px;"></div>
+                        <div class="card-body">
+                            <h5 class="card-title fs-6 fw-bold">{{ p.card_title }}</h5>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="news-date">{{ p.time_create }}</span>
+                                <span class="badge bg-light text-dark category-tag">{{ p.cat }}</span>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.reply-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const commentId = this.dataset.commentId;
+            const form = document.getElementById(`reply-form-${commentId}`);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+});
+
+
+
+
+
+</script>
+
+{% endblock %}

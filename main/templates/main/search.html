@@ -1,0 +1,133 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<main class="flex-grow-1 container py-4">
+    <!-- Search Box -->
+    <div class="mb-4">
+        <h2 class="fs-2 fw-bold mb-3">Поиск по сайту</h2>
+        <form action="{% url 'search' %}" method="get">
+            <div class="row g-2">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent">
+                            <svg class="bi" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </span>
+                        <input type="text" name="q" class="form-control search-input" 
+                               placeholder="Введите поисковый запрос..." value="{{ query }}"
+                               id="searchInput">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <span class="d-none d-md-inline">Найти</span>
+                        <span class="d-md-none">🔍</span>
+                    </button>
+                </div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const searchInput = document.getElementById('searchInput');
+                    const searchForm = document.querySelector('form[method="get"]');
+                    
+                    
+                    searchInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            searchForm.submit();
+                        }
+                    });
+                    
+                    
+                    const searchButton = document.querySelector('button[type="submit"]');
+                    if (searchButton) {
+                        searchButton.addEventListener('click', function() {
+                            searchForm.submit();
+                        });
+                    }
+                });
+                </script>
+
+            <div class="mb-4 mt-4">
+                <h3 class="fs-5 fw-semibold mb-3">Фильтры поиска</h3>
+                <div class="filters-container">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="category" id="filter-all" 
+                               value="all" {% if selected_category == 'all' %}checked{% endif %}>
+                        <label class="form-check-label" for="filter-all">Все</label>
+                    </div>
+                    
+                    {% for category in categories %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="category" 
+                               id="filter-{{ category.slug }}" value="{{ category.slug }}"
+                               {% if selected_category == category.slug %}checked{% endif %}>
+                        <label class="form-check-label" for="filter-{{ category.slug }}">
+                            {{ category.name }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    <span class="fs-5 fw-semibold">Сортировка:</span>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" 
+                               id="sort-relevance" value="relevance"
+                               {% if sort_by == 'relevance' %}checked{% endif %}>
+                        <label class="form-check-label" for="sort-relevance">По релевантности</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sort" 
+                               id="sort-date" value="date"
+                               {% if sort_by == 'date' %}checked{% endif %}>
+                        <label class="form-check-label" for="sort-date">По дате (сначала новые)</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Search Results -->
+    <div class="mb-4">
+        <h3 class="fs-5 fw-semibold mb-3">Результаты поиска: <span>{{ results_count }}</span></h3>
+        <div>
+            {% for article in articles %}
+            <div class="card search-card mb-4">
+                <div class="row g-0">
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h3 class="card-title fs-4 fw-bold">
+                                <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-dark">
+                                    {{ article.card_title }}
+                                </a>
+                            </h3>
+                            <p class="card-text text-muted">
+                                {{ article.card_text|truncatechars:200 }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <small class="text-muted">{{ article.time_create|time }}</small>
+                                <span class="badge bg-light text-dark category-tag">
+                                    {{ article.cat.name }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        {% if article.card_image %}
+                        <div class="news-image" style="background-image: url('{{ article.card_image.url }}');"></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-info">
+                По вашему запросу ничего не найдено.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}
